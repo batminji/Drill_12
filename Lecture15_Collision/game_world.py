@@ -1,4 +1,5 @@
 objects = [[] for _ in range(4)]
+collision_pairs = {}
 
 # fill here
 
@@ -56,7 +57,6 @@ def clear():
 
 
 # fill here
-collision_pairs = {}
 
 def add_collision_pair(group, a, b):
     if group not in collision_pairs:

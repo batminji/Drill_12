@@ -1,7 +1,6 @@
 # 이것은 각 상태들을 객체로 구현한 것임.
 
-from pico2d import get_time, load_image, load_font, clamp, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDLK_LEFT, SDLK_RIGHT, \
-    draw_rectangle
+from pico2d import *
 from ball import Ball
 import game_world
 import game_framework
@@ -46,15 +45,6 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 8
-
-
-
-
-
-
-
-
-
 
 
 class Idle:
@@ -174,10 +164,6 @@ class StateMachine:
     def draw(self):
         self.cur_state.draw(self.boy)
 
-
-
-
-
 class Boy:
     def __init__(self):
         self.x, self.y = 50, 90
@@ -197,6 +183,7 @@ class Boy:
             self.ball_count -= 1
             ball = Ball(self.x, self.y, self.face_dir*10)
             game_world.add_object(ball)
+            game_world.add_collision_pair('ball:zombie', ball, None)
 
     def update(self):
         self.state_machine.update()
@@ -211,8 +198,11 @@ class Boy:
 
     # fill here
     def get_bb(self):
-        return self.x - 50, self.y - 50, self.x + 50, self.y + 50
+        return self.x - 20, self.y - 50, self.x + 20, self.y + 50
 
     def handle_collision(self, group, other):
         if group == 'boy:ball':
+            print('공이랑 충돌 !')
             self.ball_count += 1
+        if group == 'boy:zombie':
+            game_framework.quit()
