@@ -38,6 +38,9 @@ def init():
     balls = [Ball(random.randint(100, 1600 - 100), 60, 0) for _ in range(30)]
     game_world.add_objects(balls, 1)
 
+    for ball in balls:
+        game_world.add_collision_pair('boy:ball', boy, ball)
+
 
 def finish():
     game_world.clear()
@@ -46,10 +49,8 @@ def finish():
 
 def update():
     game_world.update()
-    # fill here
-    for ball in balls:
-        if game_world.collide(boy, ball):
-            print('충돌 !')
+    game_world.handle_collisions()
+
 
 def draw():
     clear_canvas()
